@@ -9,26 +9,56 @@ import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 
-import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr } from 'src/constants/articleProps';
+import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr, OptionType } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
+
+type TSettings = {
+	fontFamily: OptionType;
+	fontSize: OptionType;
+	fontColor: OptionType;
+	bgColor: OptionType;
+	contentWidth: OptionType;
+};
 
 export const ArticleParamsForm = () => {
 	const formElement = useRef<HTMLFormElement | null>(null);
 
 	const [isOpen, toggleState] = useState(false);
-	const [selectedFontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
-	const [selectedFontSize, setFontSize] = useState(fontSizeOptions[0]);
-	const [selectedFontColor, setFontColor] = useState(fontColors[0]);
-	const [selectedBgColor, setBgColor] = useState(backgroundColors[0]);
-	const [selectedContentWidth, setContentWidth] = useState(contentWidthArr[0]);
+	const [settings, setSettings] = useState<TSettings>({
+		fontFamily: fontFamilyOptions[0],
+		fontSize: fontSizeOptions[0],
+		fontColor: fontColors[0],
+		bgColor: backgroundColors[0],
+		contentWidth: contentWidthArr[0]
+	});
 
 	const handleToggleState: OnClick = () => {
 		toggleState(!isOpen);
 	}
 
+	const setFontFamily = (newFontFamily: OptionType) => {
+		setSettings({ ...settings, fontFamily: newFontFamily});
+	}
+
+	const setFontSize = (newFontSize: OptionType) => {
+		setSettings({ ...settings, fontSize: newFontSize});
+	}
+
+	const setFontColor = (newFontColor: OptionType) => {
+		setSettings({ ...settings, fontColor: newFontColor});
+	}
+
+	const setBgColor = (newBgColor: OptionType) => {
+		setSettings({ ...settings, bgColor: newBgColor});
+	}
+
+	const setContentWidth = (newContentWidth: OptionType) => {
+		setSettings({ ...settings, contentWidth: newContentWidth});
+	}
+
 	const handleResetEvent = () => {
-		
+
 	}
 
 	const handleSubmitEvent = (evt: SubmitEvent) => {
@@ -56,17 +86,17 @@ export const ArticleParamsForm = () => {
 				<form className={styles.form} ref={formElement}>
 					<Text as={'h2'} weight={800} size={31} uppercase>Задайте параметры</Text>
 
-					<Select title='Шрифт' selected={selectedFontFamily} options={fontFamilyOptions} onChange={setFontFamily} ></Select>
+					<Select title='Шрифт' selected={settings.fontFamily} options={fontFamilyOptions} onChange={setFontFamily} ></Select>
 
-					<RadioGroup title='Размер шрифта' name='FontSize' selected={selectedFontSize} options={fontSizeOptions} onChange={setFontSize}></RadioGroup>
+					<RadioGroup title='Размер шрифта' name='FontSize' selected={settings.fontSize} options={fontSizeOptions} onChange={setFontSize}></RadioGroup>
 
-					<Select title='Цвет шрифта' selected={selectedFontColor} options={fontColors} onChange={setFontColor} ></Select>
+					<Select title='Цвет шрифта' selected={settings.fontColor} options={fontColors} onChange={setFontColor} ></Select>
 
 					<Separator></Separator>
 
-					<Select title='Цвет фона' selected={selectedBgColor} options={backgroundColors} onChange={setBgColor} ></Select>
+					<Select title='Цвет фона' selected={settings.bgColor} options={backgroundColors} onChange={setBgColor} ></Select>
 
-					<Select title='Ширина контента' selected={selectedContentWidth} options={contentWidthArr} onChange={setContentWidth}></Select>
+					<Select title='Ширина контента' selected={settings.contentWidth} options={contentWidthArr} onChange={setContentWidth}></Select>
 
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' type='reset' onClick={handleResetEvent} />
