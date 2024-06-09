@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import { ArrowButton } from 'components/arrow-button';
@@ -13,6 +13,7 @@ import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, conte
 
 import styles from './ArticleParamsForm.module.scss';
 import { TSettings } from 'src/index';
+import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
 export type TFormProps = {
 	currentSettings: TSettings;
@@ -20,8 +21,15 @@ export type TFormProps = {
 }
 
 export const ArticleParamsForm = ({ currentSettings, applySettingsFunc }: TFormProps) => {
+	const rootRef = useRef<HTMLDivElement>(null);
 	const [isOpen, toggleState] = useState(false);
 	const [formState, setFormState] = useState<TSettings>(currentSettings)
+
+	useOutsideClickClose({
+		isOpen: isOpen,
+		rootRef,
+		onChange: toggleState
+	})
 
 	const handleToggleState: OnClick = () => {
 		toggleState(!isOpen);
@@ -49,7 +57,7 @@ export const ArticleParamsForm = ({ currentSettings, applySettingsFunc }: TFormP
 	});
 
 	return (
-		<>
+		<div ref={rootRef}>
 			<ArrowButton handleClick={handleToggleState} isOpen={isOpen} />
 			<aside className={asideCls}>
 				<form className={styles.form} onSubmit={handleSubmitEvent}>
@@ -73,6 +81,6 @@ export const ArticleParamsForm = ({ currentSettings, applySettingsFunc }: TFormP
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
