@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import { ArrowButton } from 'components/arrow-button';
@@ -13,9 +13,9 @@ import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, conte
 
 import styles from './ArticleParamsForm.module.scss';
 
-
-
 export const ArticleParamsForm = () => {
+	const formElement = useRef<HTMLFormElement | null>(null);
+
 	const [isOpen, toggleState] = useState(false);
 	const [selectedFontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
 	const [selectedFontSize, setFontSize] = useState(fontSizeOptions[0]);
@@ -27,6 +27,23 @@ export const ArticleParamsForm = () => {
 		toggleState(!isOpen);
 	}
 
+	const handleResetEvent = () => {
+		
+	}
+
+	const handleSubmitEvent = (evt: SubmitEvent) => {
+		evt.preventDefault();
+		console.log('submit evt')
+	}
+
+	useEffect(() => {
+		formElement.current?.addEventListener('submit', handleSubmitEvent);
+
+		return () => {
+			formElement.current?.removeEventListener('submit', handleSubmitEvent);
+		}
+	}, []);
+
 	const asideCls = clsx({
 		[styles.container]: true,
 		[styles.container_open]: isOpen
@@ -36,7 +53,7 @@ export const ArticleParamsForm = () => {
 		<>
 			<ArrowButton handleClick={handleToggleState} isOpen={isOpen} />
 			<aside className={asideCls}>
-				<form className={styles.form}>
+				<form className={styles.form} ref={formElement}>
 					<Text as={'h2'} weight={800} size={31} uppercase>Задайте параметры</Text>
 
 					<Select title='Шрифт' selected={selectedFontFamily} options={fontFamilyOptions} onChange={setFontFamily} ></Select>
@@ -52,7 +69,7 @@ export const ArticleParamsForm = () => {
 					<Select title='Ширина контента' selected={selectedContentWidth} options={contentWidthArr} onChange={setContentWidth}></Select>
 
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' />
+						<Button title='Сбросить' type='reset' onClick={handleResetEvent} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
