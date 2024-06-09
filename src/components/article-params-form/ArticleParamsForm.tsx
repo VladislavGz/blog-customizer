@@ -35,12 +35,11 @@ export const ArticleParamsForm = ({ currentSettings, applySettingsFunc }: TFormP
 	}
 
 	const handleResetEvent = () => {
-		console.log('handler reset')
+		setFormState(currentSettings);
 	}
 
 	const handleSubmitEvent = (evt: React.FormEvent) => {
 		evt.preventDefault()
-		console.log('handler submit')
 		applySettingsFunc(formState)
 	}
 
