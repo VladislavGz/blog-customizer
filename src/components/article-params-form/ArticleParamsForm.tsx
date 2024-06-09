@@ -9,25 +9,11 @@ import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 
-import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr, OptionType } from 'src/constants/articleProps';
+import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
 
-export type TSettings = {
-	fontFamily: OptionType;
-	fontSize: OptionType;
-	fontColor: OptionType;
-	contentWidth: OptionType;
-	bgColor: OptionType;
-}
-
-export type TFormProps = {
-	submitHandler: () => void;
-	settings: TSettings;
-	setSettings: () => any;
-}
-
-export const ArticleParamsForm = (props: any) => {
+export const ArticleParamsForm = () => {
 	const formElement = useRef<HTMLFormElement | null>(null);
 
 	const [isOpen, toggleState] = useState(false);
@@ -36,40 +22,15 @@ export const ArticleParamsForm = (props: any) => {
 		toggleState(!isOpen);
 	}
 
-	const setFontFamily = (newFontFamily: OptionType) => {
-		props.setSettings({ ...props.settings, fontFamily: newFontFamily });
-	}
-
-	const setFontSize = (newFontSize: OptionType) => {
-		props.setSettings({ ...props.settings, fontSize: newFontSize });
-	}
-
-	const setFontColor = (newFontColor: OptionType) => {
-		props.setSettings({ ...props.settings, fontColor: newFontColor });
-	}
-
-	const setBgColor = (newBgColor: OptionType) => {
-		props.setSettings({ ...props.settings, bgColor: newBgColor });
-	}
-
-	const setContentWidth = (newContentWidth: OptionType) => {
-		props.setSettings({ ...props.settings, contentWidth: newContentWidth });
-	}
-
 	const handleResetEvent = () => {
 
 	}
 
-	const handleSubmitEvent = (evt: SubmitEvent) => {
-		evt.preventDefault();
-		console.log('submit evt');
-	}
-
 	useEffect(() => {
-		formElement.current?.addEventListener('submit', handleSubmitEvent);
+		formElement.current?.addEventListener('submit', () => {});
 
 		return () => {
-			formElement.current?.removeEventListener('submit', handleSubmitEvent);
+			formElement.current?.removeEventListener('submit', () => {});
 		}
 	}, []);
 
@@ -85,17 +46,17 @@ export const ArticleParamsForm = (props: any) => {
 				<form className={styles.form} ref={formElement}>
 					<Text as={'h2'} weight={800} size={31} uppercase>Задайте параметры</Text>
 
-					<Select title='Шрифт' selected={props.settings.fontFamily} options={fontFamilyOptions} onChange={setFontFamily} ></Select>
+					<Select title='Шрифт' selected={null} options={fontFamilyOptions} ></Select>
 
-					<RadioGroup title='Размер шрифта' name='FontSize' selected={props.settings.fontSize} options={fontSizeOptions} onChange={setFontSize}></RadioGroup>
+					<RadioGroup title='Размер шрифта' name='FontSize' selected={fontSizeOptions[0]}  options={fontSizeOptions} ></RadioGroup>
 
-					<Select title='Цвет шрифта' selected={props.settings.fontColor} options={fontColors} onChange={setFontColor} ></Select>
+					<Select title='Цвет шрифта' selected={null} options={fontColors} ></Select>
 
 					<Separator></Separator>
 
-					<Select title='Цвет фона' selected={props.settings.bgColor} options={backgroundColors} onChange={setBgColor} ></Select>
+					<Select title='Цвет фона' selected={null} options={backgroundColors} ></Select>
 
-					<Select title='Ширина контента' selected={props.settings.contentWidth} options={contentWidthArr} onChange={setContentWidth}></Select>
+					<Select title='Ширина контента' selected={null} options={contentWidthArr} ></Select>
 
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' type='reset' onClick={handleResetEvent} />
