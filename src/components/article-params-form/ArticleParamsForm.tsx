@@ -9,15 +9,29 @@ import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 
-import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr } from 'src/constants/articleProps';
+import { fontFamilyOptions, fontSizeOptions, fontColors, backgroundColors, contentWidthArr, OptionType } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
+import { TSettings } from 'src/index';
 
-export const ArticleParamsForm = () => {
+export type TFormProps = {
+	currentSettings: TSettings;
+	applySettingsFunc: (settings: TSettings) => void;
+}
+
+export const ArticleParamsForm = ({ currentSettings, applySettingsFunc }: TFormProps) => {
 	const [isOpen, toggleState] = useState(false);
+	const [formState, setFormState] = useState<TSettings>(currentSettings)
 
 	const handleToggleState: OnClick = () => {
 		toggleState(!isOpen);
+	}
+
+	const handleChange = (type: keyof TSettings) => (selected: OptionType) => {
+		setFormState(prevState => ({
+			...prevState,
+			[type]: selected
+		}))
 	}
 
 	const handleResetEvent = () => {
@@ -27,6 +41,7 @@ export const ArticleParamsForm = () => {
 	const handleSubmitEvent = (evt: React.FormEvent) => {
 		evt.preventDefault()
 		console.log('handler submit')
+		applySettingsFunc(formState)
 	}
 
 	const asideCls = clsx({
@@ -41,17 +56,17 @@ export const ArticleParamsForm = () => {
 				<form className={styles.form} onSubmit={handleSubmitEvent}>
 					<Text as={'h2'} weight={800} size={31} uppercase>Задайте параметры</Text>
 
-					<Select title='Шрифт' selected={null} options={fontFamilyOptions} ></Select>
+					<Select title='Шрифт' selected={formState.fontFamily} options={fontFamilyOptions} onChange={handleChange('fontFamily')}></Select>
 
-					<RadioGroup title='Размер шрифта' name='FontSize' selected={fontSizeOptions[0]}  options={fontSizeOptions} ></RadioGroup>
+					<RadioGroup title='Размер шрифта' name='FontSize' selected={formState.fontSize} options={fontSizeOptions} onChange={handleChange('fontSize')} ></RadioGroup>
 
-					<Select title='Цвет шрифта' selected={null} options={fontColors} ></Select>
+					<Select title='Цвет шрифта' selected={formState.fontColor} options={fontColors} onChange={handleChange('fontColor')}></Select>
 
 					<Separator></Separator>
 
-					<Select title='Цвет фона' selected={null} options={backgroundColors} ></Select>
+					<Select title='Цвет фона' selected={formState.bgColor} options={backgroundColors} onChange={handleChange('bgColor')}></Select>
 
-					<Select title='Ширина контента' selected={null} options={contentWidthArr} ></Select>
+					<Select title='Ширина контента' selected={formState.contentWidth} options={contentWidthArr} onChange={handleChange('contentWidth')}></Select>
 
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' type='reset' onClick={handleResetEvent} />
