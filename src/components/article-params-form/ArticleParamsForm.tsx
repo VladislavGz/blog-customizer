@@ -23,14 +23,19 @@ export const ArticleParamsForm = () => {
 	}
 
 	const handleResetEvent = () => {
+		console.log('handler reset')
+	}
 
+	const handleSubmitEvent = (evt: SubmitEvent) => {
+		evt.preventDefault();
+		console.log('handler submit')
 	}
 
 	useEffect(() => {
-		formElement.current?.addEventListener('submit', () => {});
+		formElement.current?.addEventListener('submit', handleSubmitEvent);
 
 		return () => {
-			formElement.current?.removeEventListener('submit', () => {});
+			formElement.current?.removeEventListener('submit', handleSubmitEvent);
 		}
 	}, []);
 
