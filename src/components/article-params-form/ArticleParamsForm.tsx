@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { ArrowButton } from 'components/arrow-button';
 import { OnClick } from '../arrow-button/ArrowButton';
 import { Button } from 'components/button';
+import { Text } from '../text';
 import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
@@ -36,9 +37,11 @@ export const ArticleParamsForm = () => {
 			<ArrowButton handleClick={handleToggleState} isOpen={isOpen} />
 			<aside className={asideCls}>
 				<form className={styles.form}>
+					<Text as={'h2'} weight={800} size={31} uppercase>Задайте параметры</Text>
+
 					<Select title='Шрифт' selected={selectedFontFamily} options={fontFamilyOptions} onChange={setFontFamily} ></Select>
 
-					<RadioGroup title='Размер шрифта' name='' selected={selectedFontSize} options={fontSizeOptions} onChange={setFontSize}></RadioGroup>
+					<RadioGroup title='Размер шрифта' name='FontSize' selected={selectedFontSize} options={fontSizeOptions} onChange={setFontSize}></RadioGroup>
 
 					<Select title='Цвет шрифта' selected={selectedFontColor} options={fontColors} onChange={setFontColor} ></Select>
 
